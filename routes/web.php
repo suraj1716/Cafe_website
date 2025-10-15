@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PageController;
@@ -25,6 +26,10 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index
 Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
 
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+
+Route::get('/about', [PageController::class, 'about'])->name('about');
 
 
 Route::get('/dashboard', function () {

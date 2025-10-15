@@ -30,24 +30,29 @@ class PageController extends Controller
         return Inertia::render('Contact');
     }
 
+      public function about()
+    {
+        return Inertia::render('About');
+    }
 
 
-    //   public function gallery()
-    // {
-    //       $galleries = Gallery::with('media')->get()->map(function ($gallery) {
-    //         return [
-    //             'id' => $gallery->id,
-    //             'title' => $gallery->title,
-    //             'images' => $gallery->getMedia('gallery')->map(function ($media) {
-    //                 return [
-    //                     'id' => $media->id,
-    //                     'url' => $media->getUrl(), // This generates the correct URL
-    //                 ];
-    //             }),
-    //         ];
-    //     });
-    //     return Inertia::render('Gallery', [
-    //         'galleryItems' => $galleries->toArray(),
-    //     ]);
-    // }
+
+      public function gallery()
+    {
+          $galleries = Gallery::with('media')->get()->map(function ($gallery) {
+            return [
+                'id' => $gallery->id,
+                'title' => $gallery->title,
+                'images' => $gallery->getMedia('gallery')->map(function ($media) {
+                    return [
+                        'id' => $media->id,
+                        'url' => $media->getUrl(), // This generates the correct URL
+                    ];
+                }),
+            ];
+        });
+        return Inertia::render('Gallery', [
+            'galleryItems' => $galleries->toArray(),
+        ]);
+    }
 }

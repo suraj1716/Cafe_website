@@ -1,10 +1,11 @@
 import React from "react";
-import { useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { motion } from "framer-motion";
 import { PageProps } from "@/types";
-import Navbar from "@/Components/App/Navbar";
+import { Coffee, Heart, Users, Leaf } from "lucide-react";
 
-const Contact: React.FC = () => {
+export default function Contact() {
   const { departments: rawDepartments, contactReasons } = usePage<PageProps>().props;
 
   const reasons = [
@@ -39,31 +40,43 @@ const Contact: React.FC = () => {
   };
 
   return (
-
-    <AuthenticatedLayout>
-        <Navbar/>
-      <div className="relative min-h-screen font-sans text-gray-900"
+    <>
+      <Head title="About Us" />
+      <AuthenticatedLayout>
+        {/* Background Wrapper */}
+         <div  className="relative min-h-screen font-sans text-gray-900"
+         style={{
+            backgroundImage: "url('/storage/menu/cafe-bg1.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+          {/* Hero Section */}
+          <section
+          className="relative flex items-center justify-center h-[30vh]  text-white"
          style={{
             backgroundImage: "url('/storage/menu/cafe-bg1.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
-      >
-        {/* Hero / Header Section */}
-        <div
-          className="max-w-6xl mx-auto px-4 py-10 space-y-8"
-
         >
-          <header className="mb-12 text-center md:text-left">
-            <div className="text-center py-10">
-                        <h1 className="text-5xl font-bold text-black">CONTACT</h1>
-
-                    </div>
-          </header>
+            <div className="absolute inset-0 bg-black/50"></div>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative z-10 text-center px-6"
+            >
+              <h1 className="text-5xl font-bold mb-4 tracking-wide">Contact Us</h1>
+              <p className="text-lg max-w-2xl mx-auto text-gray-200">
+                We'd love to hear from you! Whether it's feedback, partnership, or inquiries — drop us a message.
+              </p>
+            </motion.div>
+          </section>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="max-w-6xl mx-auto py-16 px-6 grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Left Column: Contact Form */}
             <section>
               <form
@@ -72,10 +85,9 @@ const Contact: React.FC = () => {
                 encType="multipart/form-data"
                 noValidate
               >
-                <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-                  Send a Message
-                </h2>
+                <h2 className="text-2xl font-semibold mb-6 text-gray-800">Send a Message</h2>
 
+                {/* Name */}
                 <div>
                   <label className="block mb-1 font-medium text-gray-700" htmlFor="name">
                     Full Name
@@ -89,11 +101,10 @@ const Contact: React.FC = () => {
                     placeholder="John Doe"
                     required
                   />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                  )}
+                  {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
                 </div>
 
+                {/* Email */}
                 <div>
                   <label className="block mb-1 font-medium text-gray-700" htmlFor="email">
                     Email Address
@@ -107,11 +118,10 @@ const Contact: React.FC = () => {
                     placeholder="you@example.com"
                     required
                   />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                  )}
+                  {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                 </div>
 
+                {/* Conditional Fields */}
                 {isGettingQuote && (
                   <>
                     <div>
@@ -130,6 +140,7 @@ const Contact: React.FC = () => {
                         required
                       >
                         <option value="">Select Department</option>
+                        {/* You can map departments here */}
                       </select>
                       {errors.department && (
                         <p className="mt-1 text-sm text-red-600">{errors.department}</p>
@@ -166,13 +177,12 @@ const Contact: React.FC = () => {
                         className="w-full"
                         accept="image/*,application/pdf"
                       />
-                      {errors.file && (
-                        <p className="mt-1 text-sm text-red-600">{errors.file}</p>
-                      )}
+                      {errors.file && <p className="mt-1 text-sm text-red-600">{errors.file}</p>}
                     </div>
                   </>
                 )}
 
+                {/* Message */}
                 <div>
                   <label className="block mb-1 font-medium text-gray-700" htmlFor="message">
                     Message
@@ -186,11 +196,10 @@ const Contact: React.FC = () => {
                     placeholder="Write your message here..."
                     required
                   />
-                  {errors.message && (
-                    <p className="mt-1 text-sm text-red-600">{errors.message}</p>
-                  )}
+                  {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
                 </div>
 
+                {/* Submit */}
                 <button
                   type="submit"
                   disabled={processing}
@@ -201,7 +210,7 @@ const Contact: React.FC = () => {
               </form>
             </section>
 
-            {/* Right Column: Contact Details & Map */}
+            {/* Right Column: Contact Info + Map */}
             <section className="space-y-10">
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-semibold mb-6 text-gray-800">Contact Information</h2>
@@ -245,9 +254,7 @@ const Contact: React.FC = () => {
             </section>
           </div>
         </div>
-      </div>
-    </AuthenticatedLayout>
+      </AuthenticatedLayout>
+    </>
   );
-};
-
-export default Contact;
+}

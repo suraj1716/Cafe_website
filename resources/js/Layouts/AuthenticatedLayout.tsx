@@ -132,11 +132,11 @@ const [showBarnav, setShowBarnav] = useState(false);
       <main>{children}</main>
 
       <a
-        href="https://m.me/YOUR_PAGE_USERNAME" // 🔁 replace with your Messenger username
+        href="https://www.messenger.com/e2ee/t/9170076859759048/S" // 🔁 replace with your Messenger username
         target="_blank"
         rel="noopener noreferrer"
-        className={` xs:mb-20 lg:right
-        fixed bottom-5  md:translate-y-12  xs:left-6 z-[9999] flex items-center gap-2
+        className={` xs:mb-7 lg:right
+        fixed bottom-16  md:translate-y-12  xs:left-6 z-[9999] flex items-center gap-2
          bg-yellow-400 text-green-950 px-4 py-2 rounded-full shadow-lg
        hover:bg-yellow-700 transition-all
           transform duration-500 ease-in-out

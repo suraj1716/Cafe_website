@@ -1,118 +1,230 @@
-// resources/js/Pages/Gallery/Index.tsx
-import React, { useEffect } from 'react';
-import { PageProps } from '@/types';
-import { Head } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+// import React from "react";
+// import { Head, usePage } from "@inertiajs/react";
+// import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+// import { motion } from "framer-motion";
+// import { PageProps } from "@/types";
 
-interface GalleryImage {
-  id: number;
-  url: string;
-}
+// interface GalleryImage {
+//   id: number;
+//   url: string;
+// }
 
-interface GalleryItem {
-  id: number;
-  title: string;
-  images: GalleryImage[];
-}
+// interface GalleryCategory {
+//   id: number;
+//   title: string;
+//   images: GalleryImage[];
+// }
 
-interface Props extends PageProps {
-  galleryItems: GalleryItem[];
-}
+// export default function Gallery() {
+//   const { galleryItems } = usePage<PageProps<{ galleryItems: GalleryCategory[] }>>().props;
 
-export default function Gallery({ galleryItems }: Props) {
-    console.log("Gallery test:", galleryItems);
+//   return (
+//     <>
+//       <Head title="Gallery" />
+//       <AuthenticatedLayout>
+//         {/* Background Wrapper */}
+//         <div
+//           className="relative min-h-screen font-sans text-gray-900"
+//           style={{
+//             backgroundImage: "url('/storage/menu/cafe-bg1.jpg')",
+//             backgroundSize: "cover",
+//             backgroundPosition: "center",
+//             backgroundRepeat: "no-repeat",
+//           }}
+//         >
+//           {/* Hero Section */}
+//           <section
+//             className="relative flex items-center justify-center h-[30vh] text-white"
+//             style={{
+//               backgroundImage: "url('/storage/menu/cafe-bg1.jpg')",
+//               backgroundSize: "cover",
+//               backgroundPosition: "center",
+//               backgroundRepeat: "no-repeat",
+//             }}
+//           >
+//             <div className="absolute inset-0 bg-black/50"></div>
+//             <motion.div
+//               initial={{ opacity: 0, y: 40 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               transition={{ duration: 0.8 }}
+//               className="relative z-10 text-center px-6"
+//             >
+//               <h1 className="text-5xl font-bold mb-4 tracking-wide">Our Gallery</h1>
+//               <p className="text-lg max-w-2xl mx-auto text-gray-200">
+//                 Explore moments, memories, and craftsmanship — one picture at a time.
+//               </p>
+//             </motion.div>
+//           </section>
+
+//           {/* Gallery Content */}
+//           <div className="max-w-7xl mx-auto py-16 px-6">
+//             {galleryItems && galleryItems.length > 0 ? (
+//               galleryItems.map((category, index) => (
+//                 <motion.div
+//                   key={category.id}
+//                   initial={{ opacity: 0, y: 50 }}
+//                   whileInView={{ opacity: 1, y: 0 }}
+//                   transition={{ duration: 0.8, delay: index * 0.1 }}
+//                   viewport={{ once: true }}
+//                   className="mb-16"
+//                 >
+//                   {/* Category Title */}
+//                   <h2 className="text-3xl font-semibold text-[#5C4033] mb-6 border-l-4 border-[#5C4033] pl-4">
+//                     {category.title}
+//                   </h2>
+
+//                   {/* Responsive Image Grid */}
+//                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+//                     {category.images.map((image) => (
+//                       <motion.div
+//                         key={image.id}
+//                         className="overflow-hidden rounded-2xl shadow-sm bg-white"
+//                         whileHover={{ scale: 1.05 }}
+//                         transition={{ duration: 0.3 }}
+//                       >
+//                         <img
+//                           src={image.url}
+//                           alt={category.title}
+//                           className="w-full h-48 sm:h-40 md:h-56 lg:h-60 object-cover object-center transition-transform duration-300 hover:scale-105"
+//                           loading="lazy"
+//                         />
+//                       </motion.div>
+//                     ))}
+//                   </div>
+//                 </motion.div>
+//               ))
+//             ) : (
+//               <p className="text-center text-gray-600 py-16">No gallery images available.</p>
+//             )}
+//           </div>
+//         </div>
+//       </AuthenticatedLayout>
+//     </>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+import React from "react";
+import { Head } from "@inertiajs/react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { motion } from "framer-motion";
+
+export default function Gallery() {
+  const galleryItems = [
+    {
+      title: "Coffee Moments ☕",
+      images: [
+        "/storage/gallery/i1.jpeg",
+        "/storage/gallery/i2.jpg",
+        "/storage/gallery/i3.jpeg",
+        "/storage/gallery/i4.webp",
+      ],
+    },
+    {
+      title: "Our Space 🌿",
+      images: [
+        "/storage/gallery/i5.jpg",
+        "/storage/gallery/i6.webp",
+        "/storage/gallery/i7.jpeg",
+        "/storage/gallery/i2.jpg",
+      ],
+    },
+    {
+      title: "Events & Community 🎉",
+      images: [
+        "/storage/gallery/i1.jpeg",
+        "/storage/gallery/i6.webp",
+        "/storage/gallery/i4.webp",
+      ],
+    },
+  ];
+
   return (
     <>
       <Head title="Gallery" />
       <AuthenticatedLayout>
-        <section className="w-full py-12">
-          <h2 className="text-4xl font-semibold mb-12 text-center font-serif">Gallery</h2>
+        {/* Background Wrapper */}
+        <div
+          className="relative min-h-screen font-sans text-gray-900"
+          style={{
+            backgroundImage: "url('/storage/menu/cafe-bg1.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          {/* Hero Section */}
+          <section
+            className="relative flex items-center justify-center h-[30vh] text-white"
+            style={{
+              backgroundImage: "url('/storage/menu/cafe-bg1.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <div className="absolute inset-0 bg-black/50"></div>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative z-10 text-center px-6"
+            >
+              <h1 className="text-5xl font-bold mb-4 tracking-wide">Our Gallery</h1>
+              <p className="text-lg max-w-2xl mx-auto text-gray-200">
+                Explore moments, memories, and the aroma of our cafe captured beautifully.
+              </p>
+            </motion.div>
+          </section>
 
-          {galleryItems.map((gallery, i) => (
-            <GallerySection key={gallery.id} gallery={gallery} index={i} />
-          ))}
-        </section>
+          {/* Gallery Content */}
+          <div className="max-w-7xl mx-auto py-16 px-6">
+            {galleryItems.map((category, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="mb-16"
+              >
+                {/* Category Title */}
+                <h2 className="text-3xl font-semibold text-[#5C4033] mb-6 border-l-4 border-[#5C4033] pl-4">
+                  {category.title}
+                </h2>
+
+                {/* Image Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {category.images.map((img, i) => (
+                    <motion.div
+                      key={i}
+                      className="overflow-hidden rounded-2xl shadow-sm bg-white"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <img
+                        src={img}
+                        alt={category.title}
+                        className="w-full h-48 sm:h-40 md:h-56 lg:h-60 object-cover object-center transition-transform duration-300 hover:scale-105"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </AuthenticatedLayout>
     </>
-  );
-}
-
-function GallerySection({ gallery, index }: { gallery: GalleryItem; index: number }) {
-  const gridSizes = [
-    "row-span-2 col-span-2",
-    "row-span-2 col-span-1",
-    "row-span-1 col-span-2",
-    "row-span-1 col-span-1",
-  ];
-
-  return (
-    <div className="mb-20 px-4 md:px-8 lg:px-12">
-
-
-      <div
-        className="
-          grid
-          grid-cols-3
-          auto-rows-[100px]
-          gap-4
-          md:auto-rows-[280px]
-          lg:auto-rows-[300px]
-        "
-      >
-        {gallery.images.map((image, i) => (
-          <ImageTile
-            key={image.id}
-            image={image}
-            sizeClass={gridSizes[i % gridSizes.length]}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ImageTile({
-  image,
-  sizeClass,
-}: {
-  image: GalleryImage;
-  sizeClass: string;
-}) {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 });
-
-  useEffect(() => {
-    if (inView) controls.start("visible");
-  }, [inView, controls]);
-
-  return (
-    <motion.div
-      ref={ref}
-      className={`overflow-hidden rounded-lg cursor-pointer shadow-md relative ${sizeClass}`}
-      initial="hidden"
-      animate={controls}
-      variants={{
-        hidden: { opacity: 0, y: 40 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: 'easeOut' },
-        },
-      }}
-      whileHover={{ scale: 1.04 }}
-    >
-      {/* Thin decorative border overlay */}
-      <div className="absolute inset-0 pointer-events-none rounded-lg border border-white/40 mix-blend-overlay z-10" />
-
-      <img
-        src={image.url}
-        alt={`Gallery Image ${image.id}`}
-        className="w-full h-full object-cover rounded-lg"
-        loading="lazy"
-        draggable={false}
-      />
-    </motion.div>
   );
 }
