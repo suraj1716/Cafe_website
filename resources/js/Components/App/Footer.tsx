@@ -54,7 +54,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-800 mt-8 pt-6 text-center text-gray-500 text-sm">
-        &copy; {new Date().getFullYear()} The Brew Haven Café. All rights reserved.
+        &copy; {new Date().getFullYear()} {business?.business_name}. All rights reserved.
       </div>
     </footer>
   );

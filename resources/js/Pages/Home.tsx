@@ -1,7 +1,7 @@
 import Hero_Banner from "@/Components/App/Hero_Banner";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PaginationProps } from "@/types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Link, usePage } from "@inertiajs/react";
@@ -22,6 +22,8 @@ import { cn } from "@/lib/utils";
 import HeroCarousel from "@/Components/App/Hero_Banner";
 import CountUp from "react-countup";
 import Footer from "@/Components/App/Footer";
+import useScrollInfo from "@/hooks/useScrollDirection";
+import { ChevronUp, MessageCircle } from "lucide-react";
 
 const iconPool = [
     FireIcon,
@@ -81,10 +83,31 @@ export default function Home({
     const { url } = usePage();
     const [isActive, setIsActive] = useState(false);
     const toggleExpand = () => setIsActive(!isActive);
-
     const [landscapeImages, setLandscapeImages] = useState<
         Record<number, string>
     >({});
+
+   const { business } = usePage().props as {
+    business?: {
+        business_name:string,
+      address: string;
+      phone: string;
+      email: string;
+      hours: string;
+      facebook?: string;
+      instagram?: string;
+      twitter?: string;
+    };
+  };
+
+  const showScrollTop = useScrollInfo(200);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    // showBar is a boolean, not a function, so we cannot call it
+  };
+
+
+
 
     useEffect(() => {
         AOS.init({ duration: 800, once: true });
@@ -114,8 +137,8 @@ const features = [
 ];
 
     return (
+
         <div className="overflow-x-hidden font-sans isolate">
-            {/* <AuthenticatedLayout> */}
             {/* Hero section */}
             <div className="relative z-50">
                 <HeroCarousel
@@ -526,9 +549,62 @@ const features = [
                 </div>
             </section>
 
+
+
+  <a
+        href={`https://m.me/${business?.business_name}`} // 🔁 replace with your Messenger username
+        // href="https://wa.me/+61414226056" // 🔁 replace with your whatsapp username
+        target="_blank"
+        rel="noopener noreferrer"
+        className={` xs:mb-7 lg:right
+        fixed bottom-16  md:translate-y-12  xs:left-6 z-[9999] flex items-center gap-2
+         bg-yellow-400 text-green-950 px-4 py-2 rounded-full shadow-lg
+       hover:bg-yellow-700 transition-all
+          transform duration-500 ease-in-out
+          ${
+            showScrollTop
+              ? "opacity-100 scale-100"
+              : "opacity-0 scale-0 pointer-events-none"
+          }
+      `}
+      >
+        <MessageCircle className="w-5 h-5" />
+        <span className="font-medium text-sm">Let’s Chat</span>
+      </a>
+
+      {/* 🔼 Go To Top Button */}
+
+      <button
+        onClick={scrollToTop}
+        aria-label="Go to top"
+        className={` xs:mb-16
+          fixed bottom-8 right-6 z-[9999]
+          bg-yellow-400 text-green-950 p-3 rounded-full shadow-lg
+          hover:bg-yellow-400 transition
+          transform duration-500 ease-in-out
+          ${
+            showScrollTop
+              ? "opacity-100 scale-100"
+              : "opacity-0 scale-0 pointer-events-none"
+          }
+        `}
+      >
+        <ChevronUp className="w-5 h-5" />
+      </button>
+
+
+
+
+
+
+
+
+
+
+
             <Footer />
 
-            {/* </AuthenticatedLayout> */}
+
         </div>
     );
 }
