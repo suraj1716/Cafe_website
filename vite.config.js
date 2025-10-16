@@ -8,6 +8,9 @@ export default defineConfig({
             input: 'resources/js/app.tsx',
             refresh: true,
         }),
-        react(),
+        react(),,
     ],
+    server: {
+        allowedHosts: ['poor-unscheduled-karsyn.ngrok-free.dev'],
+    }
 });
