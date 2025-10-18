@@ -6,6 +6,8 @@ RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
 
+
+
 # Stage 2 - Backend (Laravel + PHP + Composer)
 FROM php:8.2-fpm AS backend
 
@@ -23,7 +25,8 @@ WORKDIR /var/www
 COPY . .
 
 # Copy built frontend from Stage 1
-COPY --from=frontend /app/public/dist ./public/dist
+COPY --from=frontend /app/public/build ./public/build
+
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
