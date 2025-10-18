@@ -56,13 +56,13 @@ export default function MenuPage() {
             // 1️⃣ Find all unique sizes for this category
             const allSizes = Array.from(
               new Set(
-                category.menu_items.map((item) => item.size).filter(Boolean)
+                category.menu_items.map((item: any) => item.size).filter(Boolean)
               )
             ) as string[];
 
             // 2️⃣ Group menu items by name
             const itemsByName = Array.from(
-              category.menu_items.reduce((map, item) => {
+              category.menu_items.reduce((map: any, item: any) => {
                 if (!map.has(item.name)) map.set(item.name, []);
                 map.get(item.name)!.push(item);
                 return map;
@@ -85,7 +85,7 @@ export default function MenuPage() {
 
                 {/* Menu items */}
                 <div className="space-y-4">
-                  {itemsByName.map(([name, items]) => (
+                  {itemsByName.map((name: any, items: any) => (
                     <div
                       key={name}
                       className="flex justify-between items-center border-b border-gray-300 py-2"
@@ -100,7 +100,7 @@ export default function MenuPage() {
                       </div>
                       <div className="flex space-x-4 text-orange-500 font-bold">
                         {allSizes.map((size) => {
-                          const found = items.find((i) => i.size === size);
+                          const found = items.find((i: any) => i.size === size);
                           return (
                             <span key={size}>
                               {found ? `${found.price}$` : "-"}
