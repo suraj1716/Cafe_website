@@ -11,7 +11,7 @@ class BusinessSetting extends Model
         'address',
         'phone',
         'email',
-        'hours',
+        'working_hours',
         'facebook',
         'instagram',
         'twitter',

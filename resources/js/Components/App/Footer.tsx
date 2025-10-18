@@ -7,7 +7,7 @@ export default function Footer() {
       address: string;
       phone: string;
       email: string;
-      hours: string;
+      working_hours: string;
       facebook?: string;
       instagram?: string;
       twitter?: string;
@@ -38,7 +38,7 @@ export default function Footer() {
             <li>
               Email: <a href="mailto:contact@brew-haven.com" className="text-yellow-500 hover:underline">{business?.email}</a>
             </li>
-            <li>{business?.hours}</li>
+            <li>{business?.working_hours}</li>
           </ul>
         </div>
 

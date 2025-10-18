@@ -29,7 +29,9 @@
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
+        "all": "^0.0.0",
         "aos": "^2.3.4",
+        "cors": "^2.8.5",
         "framer-motion": "^12.23.22",
         "lucide-react": "^0.545.0",
         "react-countup": "^6.5.3",

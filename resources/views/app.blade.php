@@ -12,7 +12,7 @@
 
         <!-- Scripts -->
         @routes
-        @viteReactRefresh
+        {{-- @viteReactRefresh --}}
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
@@ -20,3 +20,21 @@
         @inertia
     </body>
 </html>
+
+
+{{-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    @if (app()->environment('local'))
+      @viteReactRefresh
+    @endif
+
+    @vite(['resources/js/app.tsx'])
+  </head>
+  <body>
+    @inertia
+  </body>
+</html> --}}

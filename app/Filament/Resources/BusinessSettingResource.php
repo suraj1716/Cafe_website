@@ -42,8 +42,8 @@ class BusinessSettingResource extends Resource
                 Tables\Columns\TextColumn::make('business_name'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('phone'),
-           Tables\Columns\TextColumn::make('working_hours')
-    ->label('Working Hours'),
+           Tables\Columns\TextColumn::make('working_hours'),
+
      // This will display "Not set" if working_hours is null
                 Tables\Columns\TextColumn::make('updated_at')->dateTime('M d, Y'),
             ])
