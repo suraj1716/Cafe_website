@@ -8,9 +8,12 @@ export default defineConfig({
             input: 'resources/js/app.tsx',
             refresh: true,
         }),
-        react(),,
+        react(),
     ],
     server: {
-        allowedHosts: ['poor-unscheduled-karsyn.ngrok-free.dev'],
+        // allowedHosts: ['poor-unscheduled-karsyn.ngrok-free.dev'],
+        // middlewares: [require('./ssl')], // Add this line
+        // https: true,
+        // port: 5173
     }
 });
