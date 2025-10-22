@@ -9,11 +9,13 @@ RUN apk add --no-cache python3 make g++
 # Copy package files
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
+
+# Copy all app files and build Vite assets
 COPY . .
 RUN npm run build
 
 
-# Stage 2: PHP-FPM (or just PHP CLI for artisan serve)
+# Stage 2: PHP runtime
 FROM php:8.3-cli-alpine
 
 # Install PHP extensions + dependencies
@@ -30,19 +32,17 @@ RUN apk add --no-cache \
     unzip \
     curl \
     bash \
-    postgresql-dev  # <-- for pgsql
+    postgresql-dev  # for pgsql
 
-# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
 
-# Copy app code
 WORKDIR /var/www/html
-COPY --from=node_builder /app /var/www/html
 
-# ✅ FIX: Ensure built assets are present (manifest.json etc.)
+# Copy built Laravel app and public assets
+COPY --from=node_builder /app /var/www/html
 COPY --from=node_builder /app/public/build /var/www/html/public/build
 
-# Install Composer
+# Install Composer dependencies
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
@@ -50,8 +50,16 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+# Ensure APP_ENV is production
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+
 # Expose HTTP port
 EXPOSE 8080
 
-# Run migrations and start Laravel server
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080
+# Run migrations, clear cache, and start server
+CMD php artisan migrate --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan serve --host=0.0.0.0 --port=8080
