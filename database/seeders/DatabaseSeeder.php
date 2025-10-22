@@ -13,6 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $this->call([
+        AdminUserSeeder::class,
+        GallerySeeder::class,
+        MenuSeeder::class,
+    ]);
         // User::factory(10)->create();
 $this->call(MenuSeeder::class);
         User::factory()->create([
