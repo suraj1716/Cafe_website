@@ -1,43 +1,34 @@
-# Stage 1 - Build Frontend (Vite + React)
-FROM node:18 AS frontend
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-COPY . .
-RUN npm run build
+# Use PHP 8.2 with Apache
+FROM php:8.2-apache
 
-# Stage 2 - Backend (Laravel + PHP)
-FROM php:8.2-fpm
-
-# Install system dependencies
+# Install required system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libonig-dev libzip-dev zip \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip
+    git unzip libpng-dev libonig-dev libxml2-dev zip curl npm \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
 
-WORKDIR /var/www
-
-# Copy app files
+# Copy project files
+WORKDIR /var/www/html
 COPY . .
 
-# Create necessary directories and permissions
-RUN mkdir -p bootstrap/cache storage/framework/{cache,data,sessions,views} \
-    && chown -R www-data:www-data bootstrap/cache storage
-
-# Copy built frontend
-COPY --from=frontend /app/public/build ./public/build
-
-# Install PHP dependencies
+# Install composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Clear caches
-RUN php artisan config:clear \
-    && php artisan route:clear \
-    && php artisan view:clear
+# Build frontend (Inertia/React)
+RUN npm install && npm run build
 
-# Expose port 9000 for php-fpm
-EXPOSE 9000
+# Set permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-CMD ["php-fpm"]
+# Expose port 8080 for Render
+EXPOSE 8080
+
+# Apache runs on port 8080 inside Render
+ENV APACHE_LISTEN_PORT=8080
+RUN sed -i 's/80/${APACHE_LISTEN_PORT}/g' /etc/apache2/sites-available/000-default.conf
+
+# Start Apache
+CMD ["apache2-foreground"]
