@@ -3,13 +3,16 @@ FROM node:20-alpine AS node_builder
 
 WORKDIR /app
 
-# Copy only package files first for caching
+# Install build tools needed for some npm packages
+RUN apk add --no-cache python3 make g++
+
+# Copy package files first (for caching)
 COPY package.json package-lock.json ./
 
-# Install Node dependencies
-RUN npm install
+# Install Node dependencies (use --legacy-peer-deps if needed)
+RUN npm install --legacy-peer-deps
 
-# Copy rest of the frontend & backend files
+# Copy the rest of the code
 COPY . .
 
 # Build Vite assets for production
@@ -19,7 +22,7 @@ RUN npm run build
 # Stage 2: Build PHP-FPM service
 FROM php:8.3-fpm-alpine
 
-# Install system dependencies for Laravel + required PHP extensions
+# Install system dependencies for PHP + Laravel extensions
 RUN apk add --no-cache \
     libzip-dev \
     libpng-dev \
@@ -33,13 +36,16 @@ RUN apk add --no-cache \
     git \
     unzip \
     curl \
+    bash \
     supervisor \
-    bash
+    make \
+    g++ \
+    python3
 
-# Install PHP extensions
+# Install PHP extensions required by Laravel
 RUN docker-php-ext-install pdo_mysql opcache zip pcntl exif gd intl bcmath
 
-# Copy application code
+# Copy application code from Node build stage
 WORKDIR /var/www/html
 COPY --from=node_builder /app /var/www/html
 
@@ -52,11 +58,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
+# Set permissions for storage & cache
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Expose port 9000 for PHP-FPM
+# Expose PHP-FPM port
 EXPOSE 9000
 
 # Start PHP-FPM
