@@ -1,6 +1,4 @@
-# ==============================
 # Stage 1: Build frontend assets with Node.js
-# ==============================
 FROM node:20-alpine AS node_builder
 
 WORKDIR /app
@@ -8,23 +6,19 @@ WORKDIR /app
 # Install build tools
 RUN apk add --no-cache python3 make g++
 
-# Copy only package files first (better layer caching)
-COPY package*.json ./
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
 
-# Copy all source files
+# Copy all files and build assets
 COPY . .
-
-# Build production assets (Vite)
 RUN npm run build
 
 
-# ==============================
-# Stage 2: PHP Runtime (Laravel)
-# ==============================
+# Stage 2: PHP runtime
 FROM php:8.3-cli-alpine
 
-# Install system dependencies
+# Install PHP extensions + dependencies
 RUN apk add --no-cache \
     libzip-dev \
     libpng-dev \
@@ -38,38 +32,37 @@ RUN apk add --no-cache \
     unzip \
     curl \
     bash \
-    postgresql-dev
+    postgresql-dev  # for pgsql
 
-# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
 
 WORKDIR /var/www/html
 
-# Copy Laravel app including built assets
+# Copy built Laravel app and assets
 COPY --from=node_builder /app /var/www/html
+COPY --from=node_builder /app/public/build /var/www/html/public/build
 
-# Ensure build folder exists (prevent missing manifest.json)
-RUN mkdir -p public/build && ls -la public/build
-
-# Install Composer
+# Install Composer dependencies
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
 
-# Install Composer dependencies for production
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-
-# Set proper permissions
+# Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Environment settings
+# Ensure production mode
 ENV APP_ENV=production
 ENV APP_DEBUG=false
-ENV APP_URL=http://localhost:8080
+
+# Clear any old dev caches (fix for Pail error)
+RUN php artisan clear-compiled || true \
+    && php artisan config:clear || true \
+    && php artisan cache:clear || true
 
 # Expose HTTP port
 EXPOSE 8080
 
-# Run migrations, optimize caches, then start Laravel
+# Run migrations, cache config, and start Laravel
 CMD php artisan migrate --force && \
     php artisan config:cache && \
     php artisan route:cache && \
