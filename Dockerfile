@@ -8,14 +8,8 @@ RUN apk add --no-cache python3 make g++
 
 # Copy package files
 COPY package.json package-lock.json ./
-
-# Install dependencies
 RUN npm install --legacy-peer-deps
-
-# Copy rest of the code
 COPY . .
-
-# Build Vite assets
 RUN npm run build
 
 
@@ -32,13 +26,14 @@ RUN apk add --no-cache \
     oniguruma-dev \
     icu-dev \
     zlib-dev \
-    mysql-client \
     git \
     unzip \
     curl \
-    bash
+    bash \
+    postgresql-dev  # <-- ADD THIS for pgsql
 
-RUN docker-php-ext-install pdo_mysql zip exif gd intl bcmath
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
 
 # Copy app code
 WORKDIR /var/www/html
@@ -46,17 +41,14 @@ COPY --from=node_builder /app /var/www/html
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
+# Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Expose HTTP port for Render
+# Expose HTTP port
 EXPOSE 8080
 
-# Start Laravel built-in server and run migrations
+# Run migrations and start Laravel server
 CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080
-
