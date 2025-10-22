@@ -3,26 +3,27 @@ FROM node:20-alpine AS node_builder
 
 WORKDIR /app
 
-# Install build tools for native modules
+# Install build tools
 RUN apk add --no-cache python3 make g++
 
-# Copy package files and install dependencies
+# Copy package files
 COPY package.json package-lock.json ./
+
+# Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy rest of the app
+# Copy rest of the code
 COPY . .
 
-# Build frontend assets
+# Build Vite assets
 RUN npm run build
 
 
-# Stage 2: PHP-FPM + Nginx
-FROM php:8.3-fpm-alpine
+# Stage 2: PHP-FPM (or just PHP CLI for artisan serve)
+FROM php:8.3-cli-alpine
 
-# Install system dependencies for PHP extensions + Nginx
+# Install PHP extensions + dependencies
 RUN apk add --no-cache \
-    nginx \
     libzip-dev \
     libpng-dev \
     libjpeg-turbo-dev \
@@ -35,21 +36,13 @@ RUN apk add --no-cache \
     git \
     unzip \
     curl \
-    bash \
-    supervisor \
-    make \
-    g++ \
-    python3
+    bash
 
-# Install PHP extensions required by Laravel
-RUN docker-php-ext-install pdo_mysql opcache zip pcntl exif gd intl bcmath
+RUN docker-php-ext-install pdo_mysql zip exif gd intl bcmath
 
-# Copy application code
+# Copy app code
 WORKDIR /var/www/html
 COPY --from=node_builder /app /var/www/html
-
-# Copy built frontend assets
-COPY --from=node_builder /app/public/build /var/www/html/public/build
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -61,11 +54,8 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Copy Nginx config
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+# Expose HTTP port for Render
+EXPOSE 8080
 
-# Expose HTTP port
-EXPOSE 80
-
-# Start Nginx and PHP-FPM
-CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
+# Start Laravel built-in server
+CMD php artisan serve --host=0.0.0.0 --port=8080
