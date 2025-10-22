@@ -13,6 +13,10 @@ RUN npm install --legacy-peer-deps
 # Copy all app files and build Vite assets
 COPY . .
 RUN npm run build
+# Copy all app files and build Vite assets
+COPY . .
+RUN npm run build && mv public/build/.vite/manifest.json public/build/manifest.json
+
 
 
 # Stage 2: PHP runtime

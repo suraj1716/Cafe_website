@@ -4,10 +4,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [
-    laravel({
-      input: ['resources/js/app.tsx'],
-      refresh: true,
-    }),
+  laravel({
+  input: ['resources/js/app.tsx'],
+  refresh: true,
+  buildDirectory: 'build', // 👈 add this line
+}),
     react({
       fastRefresh: false, // no eval usage
     }),
