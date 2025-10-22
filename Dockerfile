@@ -30,7 +30,7 @@ RUN apk add --no-cache \
     unzip \
     curl \
     bash \
-    postgresql-dev  # <-- ADD THIS for pgsql
+    postgresql-dev  # <-- for pgsql
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
@@ -38,6 +38,9 @@ RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
 # Copy app code
 WORKDIR /var/www/html
 COPY --from=node_builder /app /var/www/html
+
+# ✅ FIX: Ensure built assets are present (manifest.json etc.)
+COPY --from=node_builder /app/public/build /var/www/html/public/build
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
