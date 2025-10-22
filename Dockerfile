@@ -1,34 +1,63 @@
-# Use PHP 8.2 with Apache
-FROM php:8.2-apache
+# Stage 1: Build frontend assets with Node.js
+FROM node:20-alpine AS node_builder
 
-# Install required system dependencies
-RUN apt-get update && apt-get install -y \
-    git unzip libpng-dev libonig-dev libxml2-dev zip curl npm \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+WORKDIR /app
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Copy only package files first for caching
+COPY package.json package-lock.json ./
 
-# Copy project files
-WORKDIR /var/www/html
+# Install Node dependencies
+RUN npm install
+
+# Copy rest of the frontend & backend files
 COPY . .
 
-# Install composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+# Build Vite assets for production
+RUN npm run build
+
+
+# Stage 2: Build PHP-FPM service
+FROM php:8.3-fpm-alpine
+
+# Install system dependencies for Laravel + required PHP extensions
+RUN apk add --no-cache \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    libxml2-dev \
+    oniguruma-dev \
+    icu-dev \
+    zlib-dev \
+    mysql-client \
+    git \
+    unzip \
+    curl \
+    supervisor \
+    bash
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql opcache zip pcntl exif gd intl bcmath
+
+# Copy application code
+WORKDIR /var/www/html
+COPY --from=node_builder /app /var/www/html
+
+# Copy built frontend assets
+COPY --from=node_builder /app/public/build /var/www/html/public/build
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Build frontend (Inertia/React)
-RUN npm install && npm run build
-
 # Set permissions
-RUN chown -R www-data:www-data storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Expose port 8080 for Render
-EXPOSE 8080
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
 
-# Apache runs on port 8080 inside Render
-ENV APACHE_LISTEN_PORT=8080
-RUN sed -i 's/80/${APACHE_LISTEN_PORT}/g' /etc/apache2/sites-available/000-default.conf
-
-# Start Apache
-CMD ["apache2-foreground"]
+# Start PHP-FPM
+CMD ["php-fpm"]
