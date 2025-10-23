@@ -1,4 +1,4 @@
-# Stage 1: Build frontend assets with Node.js
+# Stage 1: Build frontend assets
 FROM node:20-alpine AS node_builder
 
 WORKDIR /app
@@ -6,21 +6,18 @@ WORKDIR /app
 # Install build tools
 RUN apk add --no-cache python3 make g++
 
-# Copy package files
+# Copy package files and install
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
 
-# Copy all app files and build Vite assets
+# Copy source files and build Vite assets
 COPY . .
 RUN npm run build
-# Copy all app files and build Vite assets
-COPY . .
-RUN npm run build && mv public/build/.vite/manifest.json public/build/manifest.json
-
-
+# Move manifest.json for Laravel Vite helper
+RUN mv public/build/.vite/manifest.json public/build/manifest.json
 
 # Stage 2: PHP runtime
-FROM php:8.3-cli-alpine
+FROM php:8.3-fpm-alpine
 
 # Install PHP extensions + dependencies
 RUN apk add --no-cache \
@@ -36,17 +33,19 @@ RUN apk add --no-cache \
     unzip \
     curl \
     bash \
-    postgresql-dev  # for pgsql
+    postgresql-dev \
+    supervisor \
+    nginx
 
 RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
 
 WORKDIR /var/www/html
 
-# Copy built Laravel app and public assets
+# Copy Laravel app and built assets
 COPY --from=node_builder /app /var/www/html
 COPY --from=node_builder /app/public/build /var/www/html/public/build
 
-# Install Composer dependencies
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
@@ -54,17 +53,16 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Ensure APP_ENV is production
-ENV APP_ENV=production
-ENV APP_DEBUG=false
+# Create storage symlink
+RUN php artisan storage:link
 
-# Expose HTTP port
+# Clear caches
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
+# Expose port
 EXPOSE 8080
 
-# Run migrations, clear cache, and start server
-CMD php artisan migrate --force && \
-  php artisan db:seed --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan serve --host=0.0.0.0 --port=8080
+# Use php-fpm with nginx (better than artisan serve)
+CMD ["php-fpm"]
