@@ -6,18 +6,18 @@ WORKDIR /app
 # Install build tools
 RUN apk add --no-cache python3 make g++
 
-# Copy package files and install
+# Copy package files and install dependencies
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
 
-# Copy source files and build Vite assets
+# Copy all app files
 COPY . .
+
+# Build Vite assets
 RUN npm run build
-# Move manifest.json for Laravel Vite helper
-RUN mv public/build/.vite/manifest.json public/build/manifest.json
 
 # Stage 2: PHP runtime
-FROM php:8.3-fpm-alpine
+FROM php:8.3-cli-alpine
 
 # Install PHP extensions + dependencies
 RUN apk add --no-cache \
@@ -29,13 +29,11 @@ RUN apk add --no-cache \
     oniguruma-dev \
     icu-dev \
     zlib-dev \
+    bash \
     git \
     unzip \
     curl \
-    bash \
-    postgresql-dev \
-    supervisor \
-    nginx
+    postgresql-dev
 
 RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip exif gd intl bcmath
 
@@ -49,20 +47,26 @@ COPY --from=node_builder /app/public/build /var/www/html/public/build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissions
+# Permissions for storage and cache
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # Create storage symlink
 RUN php artisan storage:link
 
-# Clear caches
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+# Environment variables
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+ENV APP_URL=https://cafe-website-3.onrender.com
+ENV PORT=8080
 
-# Expose port
+# Expose port for Render
 EXPOSE 8080
 
-# Use php-fpm with nginx (better than artisan serve)
-CMD ["php-fpm"]
+# Run migrations, cache config/routes/views, and start Laravel server
+CMD php artisan migrate --force && \
+    php artisan db:seed --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan serve --host=0.0.0.0 --port=${PORT}
