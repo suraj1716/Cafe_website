@@ -54,6 +54,9 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+# Create Laravel storage symlink
+RUN php artisan storage:link
+
 # Ensure APP_ENV is production
 ENV APP_ENV=production
 ENV APP_DEBUG=false
