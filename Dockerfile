@@ -16,6 +16,9 @@ COPY . .
 # Build Vite assets
 RUN npm run build
 
+# Move manifest to Laravel expected location
+RUN mv public/build/.vite/manifest.json public/build/manifest.json
+
 # Stage 2: PHP runtime
 FROM php:8.3-cli-alpine
 
