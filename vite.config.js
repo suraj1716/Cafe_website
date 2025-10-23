@@ -7,6 +7,7 @@ export default defineConfig({
     laravel({
       input: ['resources/js/app.tsx'],
       buildDirectory: 'build',
+       refresh: true,
     }),
     react({ fastRefresh: false }),
   ],
