@@ -154,21 +154,25 @@ const features = [
             <section className="text-gray-600 body-font">
                 <div className="container px-5 py-14 mx-auto">
                     <div className="text-center mb-10">
-                        <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900 mb-4">
-                            Raw Denim Heirloom Man Braid
-                        </h1>
-                        <p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500s">
-                            Blue bottle crucifix vinyl post-ironic four dollar
-                            toast vegan taxidermy. Gastropub indxgo juice
-                            poutine, ramps microdosing banh mi pug.
-                        </p>
+                     <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900 mb-4">
+    Welcome to The Brew Haven Café
+</h1>
+<p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500">
+    Experience the perfect blend of aromatic coffee, freshly baked pastries, and a cozy atmosphere that invites you to relax, work, or catch up with friends. Every sip and bite is crafted to brighten your day.
+</p>
+
                         <div className="flex mt-6 justify-center">
                             <div className="w-16 h-1 rounded-full bg-yellow-500 inline-flex"></div>
                         </div>
                         <button className="flex mx-auto mt-5 text-white bg-yellow-500 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-600 rounded text-lg">
-                            Explore more
+                             <Link
+                href="/about"
+
+              >
+                Explore More
+              </Link>
                         </button>
-                        <div className="lg:w-full sm:w-1/2 h-42 sm:h-300 overflow-hidden">
+                        <div className="lg:w-full sm:w-1/2 h-42 sm:h-100 mb-10 overflow-hidden">
                             <img
                                 src="/storage/home/long_banner.png"
                                 alt="Explore More"
@@ -248,214 +252,137 @@ const features = [
                 </div>
             </section>
 
-            <section className="text-gray-600 body-font">
-      <div className="container px-5 mx-auto flex flex-wrap">
-        {/* Left: Image */}
-        <div className="lg:w-1/2 w-full lg:mb-0 rounded-lg overflow-hidden">
-          <img
-            alt="feature"
-            className="object-contain object-center lg:h-[700px] w-full"
-            src="/storage/home/photo_polaroid.png"
-          />
-        </div>
+          <section className="text-gray-600 body-font mb-10">
+  <div className="container  mx-auto flex flex-col lg:flex-row items-center gap-1 px-5 ">
+    {/* Left: Image */}
+    <div className="w-full lg:w-1/2 rounded-lg overflow-hidden">
+      <img
+        alt="feature"
+        className="object-contain object-center w-full lg:h-[700px]"
+        src="/storage/home/photo_polaroid.png"
+      />
+    </div>
 
-        {/* Right: Content */}
-        <div className="flex flex-col flex-wrap sm:mb-30 lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
-          <motion.div
-            initial="hidden"
-            animate="visible"
+    {/* Right: Content */}
+    <div className="flex flex-col w-full lg:w-1/2 text-center lg:text-left gap-4">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.2 } },
+        }}
+      >
+        {/* Heading */}
+        <motion.h2
+          className="text-gray-900 text-2xl sm:text-3xl font-bold mb-3"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+          }}
+        >
+          The Brew Haven Café
+        </motion.h2>
+
+        {/* Paragraphs */}
+        {[
+          "Nestled in the heart of the city, The Brew Haven Café is a cozy retreat where coffee, creativity, and conversation blend beautifully. Step inside and be greeted by the rich aroma of freshly ground beans, warm lighting, and the gentle hum of friendly chatter.",
+          "Whether you're looking to recharge, work in peace, or share a moment with friends, our café offers the perfect escape. Indulge in our Caramel Velvet Latte or Hazelnut Mocha Bliss, paired with a freshly baked pastry or our signature blueberry cheesecake.",
+          "At The Brew Haven Café, we believe every sip should tell a story — one that warms your heart and brightens your day.",
+        ].map((text, i) => (
+          <motion.p
+            key={i}
+            className="leading-relaxed text-gray-700 text-sm sm:text-base"
             variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.2 } },
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
             }}
           >
-            {/* Heading */}
-            <motion.h2
-              className="text-gray-900 text-2xl font-bold mb-3"
+            {text}
+          </motion.p>
+        ))}
+
+        {/* Features List */}
+        <ul className="list-disc list-inside text-gray-700 mt-3 space-y-1 text-sm sm:text-base">
+          {features.map((item, i) => (
+            <motion.li
+              key={i}
               variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                hidden: { opacity: 0, x: -20 },
+                visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
               }}
             >
-              The Brew Haven Café
-            </motion.h2>
+              {item}
+            </motion.li>
+          ))}
+        </ul>
 
-            {/* Paragraphs */}
-            {[
-              "Nestled in the heart of the city, The Brew Haven Café is a cozy retreat where coffee, creativity, and conversation blend beautifully. Step inside and be greeted by the rich aroma of freshly ground beans, warm lighting, and the gentle hum of friendly chatter.",
-              "Whether you're looking to recharge, work in peace, or share a moment with friends, our café offers the perfect escape. Indulge in our Caramel Velvet Latte or Hazelnut Mocha Bliss, paired with a freshly baked pastry or our signature blueberry cheesecake.",
-              "At The Brew Haven Café, we believe every sip should tell a story — one that warms your heart and brightens your day.",
-            ].map((text, i) => (
-              <motion.p
-                key={i}
-                className="leading-relaxed text-base text-gray-700 mt-3"
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                }}
-              >
-                {text}
-              </motion.p>
-            ))}
+        {/* Learn More Link */}
+        <motion.a
+          className="mt-4 text-yellow-500 inline-flex items-center font-medium cursor-pointer hover:text-yellow-600 transition text-sm sm:text-base"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+          }}
+        >
+          Learn More
+          <svg
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            className="w-4 h-4 ml-2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </motion.a>
+      </motion.div>
+    </div>
+  </div>
+</section>
 
-            {/* Features List */}
-            <ul className="list-disc list-inside text-gray-700 mt-3 space-y-1">
-              {features.map((item, i) => (
-                <motion.li
-                  key={i}
-                  variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-                  }}
-                >
-                  {item}
-                </motion.li>
-              ))}
-            </ul>
-
-            {/* Learn More Link */}
-            <motion.a
-              className="mt-4 text-yellow-500 inline-flex items-center font-medium cursor-pointer hover:text-yellow-600 transition"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-              }}
+{/* Statistics / Counters */}
+<section
+  className="relative bg-cover bg-center bg-no-repeat py-14"
+  style={{
+    backgroundImage:
+      "url('/storage/hero-banners/backgrounds/01K749KE17JFFWFKD32WSEYBK8.jpg')",
+  }}
+>
+  <div className="container px-5 mx-auto">
+    <div className="flex flex-wrap -m-4 text-center">
+      {[
+        { count: 2700, label: "Happy Customers", icon: <path d="M8 17l4 4 4-4m-4-5v9" /> },
+        { count: 1300, label: "Positive Reviews", icon: <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /> },
+        { count: 704, label: "Social Media Followers", icon: <path d="M3 18v-6a9 9 0 0118 0v6" /> },
+        { count: 406, label: "Loyal Customers", icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> },
+      ].map((item, i) => (
+        <div key={i} className="p-4 sm:w-1/2 md:w-1/4 w-full">
+          <div className="border-2 border-white/30 px-4 py-6 rounded-lg backdrop-blur-sm">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="text-yellow-400 w-12 h-12 mb-3 inline-block"
+              viewBox="0 0 24 24"
             >
-              Learn More
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                className="w-4 h-4 ml-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-              </svg>
-            </motion.a>
-          </motion.div>
+              {item.icon}
+            </svg>
+            <h2 className="title-font font-bold text-3xl text-white">
+              <CountUp end={item.count} duration={2} separator="," />{item.label === "Social Media Followers" ? "K" : ""}
+            </h2>
+            <p className="leading-relaxed text-white">{item.label}</p>
+          </div>
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
+  </div>
+</section>
 
-            <section
-                className="relative bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage:
-                        "url('/storage/hero-banners/backgrounds/01K749KE17JFFWFKD32WSEYBK8.jpg')",
-                }}
-            >
-                {/* Dark overlay */}
-                {/* <div className="absolute inset-0 bg-red-700 z-0 opacity-90" /> */}
-                <div className="container px-5 mx-auto">
-                    <div className="flex flex-wrap -m-4 text-center">
-                        {/* Happy Customers */}
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white/30 px-4 py-6 rounded-lg backdrop-blur-sm">
-                                <svg
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    className="text-yellow-400 w-12 h-12 mb-3 inline-block"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M8 17l4 4 4-4m-4-5v9" />
-                                    <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29" />
-                                </svg>
-                                <h2 className="title-font font-bold text-3xl text-white">
-                                    <CountUp
-                                        end={2700}
-                                        duration={10}
-                                        separator=","
-                                    />
-                                </h2>
-                                <p className="leading-relaxed text-white">
-                                    Happy Customers
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Positive Reviews */}
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white/30 px-4 py-6 rounded-lg  backdrop-blur-sm">
-                                <svg
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    className="text-yellow-400 w-12 h-12 mb-3 inline-block"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75" />
-                                </svg>
-                                <h2 className="title-font font-bold text-3xl text-white">
-                                    <CountUp
-                                        end={1300}
-                                        duration={2}
-                                        separator=","
-                                    />
-                                </h2>
-                                <p className="leading-relaxed text-white">
-                                    Positive Reviews
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Awards Winning */}
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white/30 px-4 py-6 rounded-lg backdrop-blur-sm">
-                                <svg
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    className="text-yellow-400 w-12 h-12 mb-3 inline-block"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M3 18v-6a9 9 0 0118 0v6" />
-                                    <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
-                                </svg>
-                                <h2 className="title-font font-bold text-3xl text-white">
-                                    <CountUp end={704} duration={2} /> K
-                                </h2>
-                                <p className="leading-relaxed text-white">
-                                    Awards Winning
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Hair Styles */}
-                        <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
-                            <div className="border-2 border-white/30 px-4 py-6 rounded-lg backdrop-blur-sm">
-                                <svg
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    className="text-yellow-400 w-12 h-12 mb-3 inline-block"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                </svg>
-                                <h2 className="title-font font-bold text-3xl text-white">
-                                    <CountUp end={406} duration={2} />
-                                </h2>
-                                <p className="leading-relaxed text-white">
-                                    Hair Styles{" "}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <section
                 className="relative text-white py-10"
@@ -471,83 +398,75 @@ const features = [
             </section>
 
             {/* testimonils */}
-            <section className="text-gray-600 body-font">
-                <div className="container px-5 py-14 mx-auto">
-                    <h1 className="text-3xl font-medium title-font text-gray-900 mb-12 text-center">
-                        Testimonials
-                    </h1>
-                    <div className="flex flex-wrap -m-4">
-                        <div className="p-4 md:w-1/2 w-full">
-                            <div className="h-full bg-gray-100 p-8 rounded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    className="block w-5 h-5 text-gray-400 mb-4"
-                                    viewBox="0 0 975.036 975.036"
-                                >
-                                    <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
-                                </svg>
-                                <p className="leading-relaxed mb-6">
-                                    Synth chartreuse iPhone lomo cray raw denim
-                                    brunch everyday carry neutra before they
-                                    sold out fixie 90's microdosing. Tacos
-                                    pinterest fanny pack venmo, post-ironic
-                                    heirloom try-hard pabst authentic iceland.
-                                </p>
-                                <a className="inline-flex items-center">
-                                    <img
-                                        alt="testimonial"
-                                        src="https://dummyimage.com/106x106"
-                                        className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center"
-                                    />
-                                    <span className="flex-grow flex flex-col pl-4">
-                                        <span className="title-font font-medium text-gray-900">
-                                            Holden Caulfield
-                                        </span>
-                                        <span className="text-gray-500 text-sm">
-                                            UI DEVELOPER
-                                        </span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="p-4 md:w-1/2 w-full">
-                            <div className="h-full bg-gray-100 p-8 rounded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    className="block w-5 h-5 text-gray-400 mb-4"
-                                    viewBox="0 0 975.036 975.036"
-                                >
-                                    <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
-                                </svg>
-                                <p className="leading-relaxed mb-6">
-                                    Synth chartreuse iPhone lomo cray raw denim
-                                    brunch everyday carry neutra before they
-                                    sold out fixie 90's microdosing. Tacos
-                                    pinterest fanny pack venmo, post-ironic
-                                    heirloom try-hard pabst authentic iceland.
-                                </p>
-                                <a className="inline-flex items-center">
-                                    <img
-                                        alt="testimonial"
-                                        src="https://dummyimage.com/107x107"
-                                        className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center"
-                                    />
-                                    <span className="flex-grow flex flex-col pl-4">
-                                        <span className="title-font font-medium text-gray-900">
-                                            Alper Kamu
-                                        </span>
-                                        <span className="text-gray-500 text-sm">
-                                            DESIGNER
-                                        </span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+          <section className="text-gray-600 body-font">
+  <div className="container px-5 py-14 mx-auto">
+    <h1 className="text-3xl font-medium title-font text-gray-900 mb-12 text-center">
+      Testimonials
+    </h1>
+    <div className="flex flex-wrap -m-4">
+      {/* Testimonial 1 */}
+      <div className="p-4 md:w-1/2 w-full">
+        <div className="h-full bg-gray-100 p-8 rounded">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="block w-5 h-5 text-gray-400 mb-4"
+            viewBox="0 0 975.036 975.036"
+          >
+            <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+          </svg>
+          <p className="leading-relaxed mb-6">
+            "The Brew Haven Café has completely transformed my mornings! Their caramel lattes are heavenly, and the cozy atmosphere makes it my favorite spot to relax or catch up on work."
+          </p>
+          <a className="inline-flex items-center">
+            <img
+              alt="testimonial"
+              src="https://dummyimage.com/106x106/000/fff&text=J.D"
+              className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center"
+            />
+            <span className="flex-grow flex flex-col pl-4">
+              <span className="title-font font-medium text-gray-900">
+                John Doe
+              </span>
+              <span className="text-gray-500 text-sm">Freelancer</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      {/* Testimonial 2 */}
+      <div className="p-4 md:w-1/2 w-full">
+        <div className="h-full bg-gray-100 p-8 rounded">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="block w-5 h-5 text-gray-400 mb-4"
+            viewBox="0 0 975.036 975.036"
+          >
+            <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+          </svg>
+          <p className="leading-relaxed mb-6">
+            "I always recommend The Brew Haven to friends visiting the city. The staff is friendly, and the blueberry cheesecake is out of this world!"
+          </p>
+          <a className="inline-flex items-center">
+            <img
+              alt="testimonial"
+              src="https://dummyimage.com/107x107/000/fff&text=A.K"
+              className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center"
+            />
+            <span className="flex-grow flex flex-col pl-4">
+              <span className="title-font font-medium text-gray-900">
+                Alice Kim
+              </span>
+              <span className="text-gray-500 text-sm">Food Blogger</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
 

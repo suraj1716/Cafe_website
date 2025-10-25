@@ -45,103 +45,102 @@ export default function MenuPage() {
                 <Head title="Menu" />
 
                 {/* Header Section */}
-                <div className="text-center py-10">
-                    <h1 className="text-5xl font-bold">CAFE</h1>
-                    <p className="text-orange-500 text-2xl mt-2">
-                        Restaurant Menu
-                    </p>
-                    <p className="mt-1 text-sm text-gray-600">
-                        ESTD 2008 | 100% Roasted Bean | Healthy Homemade Bread
-                    </p>
-                </div>
+            <div className="text-center py-10">
+  <h1 className="text-4xl md:text-5xl font-bold">CAFE</h1>
+  <p className="text-orange-500 text-xl md:text-2xl mt-2">Restaurant Menu</p>
+  <p className="mt-1 text-xs md:text-sm text-gray-600">
+    ESTD 2008 | 100% Roasted Bean | Healthy Homemade Bread
+  </p>
+</div>
 
-                {/* Categories */}
-                <div className="max-w-6xl mx-auto px-4 space-y-16">
-                    {menuCategories.map((category) => {
-                        // ✅ Collect unique sizes for this category
-                        const allSizes = Array.from(
-                            new Set(
-                                category.menu_items
-                                    .map((item: MenuItem) => item.size) // ✅ explicitly type 'item'
-                                    .filter(Boolean)
-                            )
-                        ) as string[];
+{/* Categories */}
+<div className="max-w-6xl mx-auto px-2 sm:px-4 space-y-16">
+  {menuCategories.map((category) => {
+    const allSizes = Array.from(
+      new Set(
+        category.menu_items.map((item: MenuItem) => item.size).filter(Boolean)
+      )
+    ) as string[];
 
-                        // ✅ Group menu items by name (typed safely)
-                        const itemsByName = [
-                            ...category.menu_items
-                                .reduce(
-                                    (
-                                        map: Map<string, MenuItem[]>,
-                                        item: MenuItem
-                                    ) => {
-                                        if (!map.has(item.name))
-                                            map.set(item.name, []);
-                                        map.get(item.name)!.push(item);
-                                        return map;
-                                    },
-                                    new Map<string, MenuItem[]>()
-                                )
-                                .entries(),
-                        ];
+    const itemsByName = [
+      ...category.menu_items
+        .reduce(
+          (map: Map<string, MenuItem[]>, item: MenuItem) => {
+            if (!map.has(item.name)) map.set(item.name, []);
+            map.get(item.name)!.push(item);
+            return map;
+          },
+          new Map<string, MenuItem[]>()
+        )
+        .entries(),
+    ];
 
-                        return (
-                            <div
-                                className="bg-slate-50 p-10"
-                                key={category.id}
-                                id={`category-${category.id}`}
-                            >
-                                {/* Category Header */}
-                                <h2 className="text-3xl font-bold border-b border-orange-500 pb-2 mb-6 flex justify-between items-center">
-                                    <span>{category.name}</span>
-                                    {allSizes.length > 0 && (
-                                        <div className="flex space-x-4 text-orange-500 font-bold text-lg">
-                                            {allSizes.map((size) => (
-                                                <span key={size}>{size}</span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </h2>
+    return (
+      <div
+        className="bg-slate-50 p-4 sm:p-8 md:p-10"
+        key={category.id}
+        id={`category-${category.id}`}
+      >
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b-2 border-orange-500 text-left">
+              <th className="py-3 px-2 sm:px-4 w-[40%] sm:w-1/2 text-base sm:text-lg font-bold text-gray-800">
+                <h2 className="text-2xl sm:text-3xl font-bold pb-1 sm:pb-2">
+                  {category.name}
+                </h2>
+              </th>
+              {allSizes.map((size) => (
+                <th
+                  key={size}
+                  className="py-3 px-2 sm:px-4 w-[60px] sm:w-[10px] text-base sm:text-lg font-bold text-orange-500 text-center"
+                >
+                  {size}
+                </th>
+              ))}
+            </tr>
+          </thead>
 
-                                {/* Menu items list */}
-                                <div className="space-y-4">
-                                    {itemsByName.map(([name, items]) => (
-                                        <div
-                                            key={name}
-                                            className="flex justify-between items-center border-b border-gray-300 py-2"
-                                        >
-                                            <div>
-                                                <p className="font-semibold">
-                                                    {name}
-                                                </p>
-                                                {items[0].description && (
-                                                    <p className="text-gray-500 text-sm">
-                                                        {items[0].description}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <div className="flex space-x-4 text-orange-500 font-bold">
-                                                {allSizes.map((size) => {
-                                                    const found = items.find(
-                                                        (i: MenuItem) =>
-                                                            i.size === size
-                                                    ); // ✅ add type
-                                                    return (
-                                                        <span key={size}>
-                                                            {found
-                                                                ? `${found.price}$`
-                                                                : "-"}
-                                                        </span>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+          <tbody>
+            {itemsByName.map(([name, items], index) => (
+              <tr
+                key={name}
+                className={`border-b border-gray-200 ${
+                  index % 2 === 0 ? "bg-white" : "bg-slate-100"
+                }`}
+              >
+                {/* Item Name + Description */}
+                <td className="py-3 px-2 sm:px-4 align-top w-[40%] sm:w-1/2">
+                  <div className="font-semibold text-gray-800 text-sm sm:text-base">
+                    {name}
+                  </div>
+                  {items[0].description && (
+                    <div className="text-xs sm:text-sm text-gray-500">
+                      {items[0].description}
+                    </div>
+                  )}
+                </td>
+
+                {/* Price Columns */}
+                {allSizes.map((size) => {
+                  const found = items.find((i: MenuItem) => i.size === size);
+                  return (
+                    <td
+                      key={size}
+                      className="py-3 px-2 sm:px-4 text-center font-semibold text-orange-600 text-sm sm:text-base"
+                    >
+                      {found ? `${found.price}$` : "-"}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  })}
+</div>
+
             </div>
         </AuthenticatedLayout>
     );

@@ -60,56 +60,59 @@ console.log("banner:", title, subtitle, image_path, button_text, button_link);
     <div className="absolute inset-0 bg-black/20 z-10" />
 
     {/* Content Section */}
-    <div className="relative z-20 container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-      {/* Text */}
-      <motion.div
-        className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center"
-        initial={{ opacity: 0, x: -40 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1 }}
+ <div className="relative z-20 container mx-auto flex flex-col-reverse md:flex-row px-5 py-24 items-center">
+  {/* Left: Text */}
+  <motion.div
+    className="flex flex-col items-center text-center md:items-start md:text-left mb-10 md:mb-0 md:w-1/2 lg:pr-24 md:pr-16"
+    initial={{ opacity: 0, x: -40 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 1 }}
+  >
+    <h1 className="title-font font-funky font-bold text-white drop-shadow-md mb-4 text-5xl sm:text-7xl md:text-6xl lg:text-7xl">
+      {title}
+    </h1>
+
+    <p className="mb-8 text-gray-100 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl">
+      {subtitle}
+    </p>
+
+    <div className="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto">
+      <motion.button
+        type="button"
+        onClick={() => router.visit(button_link)}
+        className="inline-flex text-black bg-yellow-400 border-0 py-2 px-6 font-semibold hover:bg-yellow-500 rounded-lg text-base sm:text-lg w-full sm:w-auto justify-center"
+        whileHover={{ scale: 1.05 }}
       >
-        <h1 className="title-font text-7xl mb-4 font-bold text-white drop-shadow-md font-funky">
-  {title}
-</h1>
+        {button_text || "Learn More"}
+      </motion.button>
 
-        <p className="mb-8 leading-relaxed text-gray-100">{subtitle}</p>
-
-        <div className="flex justify-center gap-4">
-          <motion.button
-            type="button"
-            onClick={() => router.visit(button_link)}
-            className="inline-flex text-black bg-yellow-400 border-0 py-2 px-6 font-semibold hover:bg-yellow-500 rounded-lg text-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            {button_text || "Learn More"}
-          </motion.button>
-
-          <motion.button
-            onClick={() =>
-              window.scrollBy({ top: 550, behavior: "smooth" })
-            }
-            className="inline-flex text-gray-100 bg-transparent border border-white/60 py-2 px-6 hover:bg-white/10 rounded-lg text-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            Scroll Down
-          </motion.button>
-        </div>
-      </motion.div>
-
-      {/* Right Image */}
-      <motion.div
-        className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6"
-        initial={{ opacity: 0, x: 40, scale: 1.05 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ duration: 1 }}
+      <motion.button
+        onClick={() =>
+          window.scrollBy({ top: 550, behavior: "smooth" })
+        }
+        className="inline-flex text-gray-100 bg-transparent border border-white/60 py-2 px-6 hover:bg-white/10 rounded-lg text-base sm:text-lg w-full sm:w-auto justify-center"
+        whileHover={{ scale: 1.05 }}
       >
-        <img
-          className="object-cover object-center rounded-lg "
-          alt={title}
-          src={image_path}
-        />
-      </motion.div>
+        About Us
+      </motion.button>
     </div>
+  </motion.div>
+
+  {/* Right: Image */}
+  <motion.div
+    className="w-full md:w-1/2 lg:max-w-lg mb-10 md:mb-0 flex justify-center"
+    initial={{ opacity: 0, x: 40, scale: 1.05 }}
+    animate={{ opacity: 1, x: 0, scale: 1 }}
+    transition={{ duration: 1 }}
+  >
+    <img
+      className="object-cover object-center rounded-lg w-full max-w-md sm:max-w-lg lg:max-w-full"
+      alt={title}
+      src={image_path}
+    />
+  </motion.div>
+</div>
+
   </motion.section>
 );
 
